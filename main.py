@@ -2,6 +2,9 @@ from tkinter import *
 from  tkinter import messagebox
 import random
 import pyperclip
+import json
+
+
 #-----------------------password generator ----------------------#
 def generate_password():
     letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -22,6 +25,12 @@ def Save():
     webE = WEntry.get()
     emaE = EEntry.get()
     passE = PEntry.get()
+    new_data={
+        webE:
+            {"Email":emaE,
+             "Password":passE
+            }
+    }
 
     if webE == "" or emaE == "" or passE == "" or emaE == "yheyskebede2015@gmail.com":
         messagebox.showinfo(title="Warning", message="You missed something.")
@@ -33,23 +42,40 @@ def Save():
     )
 
     if is_ok:
-        with open("Data.txt", "a") as data:
-            data.write(f"{webE} | {passE} | {emaE}\n")
+        try:
+            with open("Data.json", "r") as data:
+                file=json.load(data)
+                file.update(new_data)
+            with open("Data.json", "w") as data:
+                json.dump(file, data, indent=4)
+        except:
+            with open("Data.json", "w") as data:
+                    json.dump(new_data, data, indent=4)
 
-        messagebox.showinfo(
-            title="Success",
-            message="Password saved successfully!"
-        )
 
         WEntry.delete(0, END)
         PEntry.delete(0, END)
         EEntry.delete(0, END)
+        messagebox.showinfo(title = "Success",message = "Password saved successfully!")
 
 
+#----------------------------- search ----------------------#
+def search():
+    webE = WEntry.get()
+    try:
+        with open("Data.json", "r") as data:
+            file = json.load(data)
+    except:
+        messagebox.showinfo(title=f"Error", message=f"Sorry!No data File Found.")
+    else:
+        if webE in file:
+            messagebox.showinfo(title=f"{webE}",message=f"Email: {file[webE]['Email']}\n Password:{file[webE]['Password']}" )
+        else:
+            messagebox.showinfo(title=f"Error",message=f"Sorry,No information about {webE}.")
 
-
-
-
+    WEntry.delete(0, END)
+    PEntry.delete(0, END)
+    EEntry.delete(0, END)
 
 
 #-----------------------ui setup----------------------#
@@ -83,8 +109,11 @@ add.grid(row=6,column=2,columnspan=4,sticky="w")
 generator=Button(text="Generate Password",command=generate_password)
 generator.grid(row=5,column=3,sticky="e")
 
-WEntry=Entry(width=45)
-WEntry.grid(column=2,row=3,columnspan=4,sticky="w")
+search=Button(text="Search",width=15,command=search)
+search.grid(row=3,column=3,sticky="e")
+
+WEntry=Entry(width=30)
+WEntry.grid(column=2,row=3,columnspan=3,sticky="w")
 
 EEntry=Entry(width=45)
 EEntry.grid(column=2,row=4,columnspan=4,sticky="w")
