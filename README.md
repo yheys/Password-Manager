@@ -1,9 +1,21 @@
-A simple Password Manager desktop application built with Python and Tkinter.
-It allows users to generate strong passwords, save them securely to a file, and copy passwords to the clipboard.
+A secure and user-friendly Password Manager desktop application built with Python and Tkinter.
+This project allows users to generate strong passwords, store them safely using JSON, search saved credentials, and copy passwords to the clipboard.
 
-Generate random strong passwords
-Copy generated password to clipboard
-Save website, email/username, and password
-Input validation with popup messages
+This project was incrementally upgraded as part of my Friday learning progress, demonstrating continuous improvement and real-world development practices.
+
+**Features**
+Generate strong random passwords
+
+Copy passwords to clipboard automatically
+
+Save credentials using structured JSON storage
+
+Search saved passwords by website name
+
+Input validation with user-friendly alerts
+
+Prevents silent overwriting of existing entries
+
 Confirmation dialog before saving
-Simple and clean GUI using Tkinter
+
+Clean and simple GUI using Tkinter
