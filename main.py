@@ -48,19 +48,31 @@ def Save():
                 file.update(new_data)
             with open("Data.json", "w") as data:
                 json.dump(file, data, indent=4)
-        except:
+        except FileNotFoundError:
             with open("Data.json", "w") as data:
                     json.dump(new_data, data, indent=4)
+        except json.JSONDecodeError:
+            with open("Data.json", "w") as data:
+                json.dump(new_data, data, indent=4)
+    if webE in file:
+        overwrite = messagebox.askyesno(
+            title="Already Exists",
+            message=f"An entry for '{webE}' already exists.\nDo you want to overwrite it?"
+        )
+        if not overwrite:
+            return
 
+    file.update(new_data)
 
-        WEntry.delete(0, END)
-        PEntry.delete(0, END)
-        EEntry.delete(0, END)
-        messagebox.showinfo(title = "Success",message = "Password saved successfully!")
+    WEntry.delete(0, END)
+    PEntry.delete(0, END)
+    EEntry.delete(0, END)
+    WEntry.focus()
+    messagebox.showinfo(title = "Success",message = "Password saved successfully!")
 
 
 #----------------------------- search ----------------------#
-def search():
+def search_password():
     webE = WEntry.get()
     try:
         with open("Data.json", "r") as data:
@@ -109,11 +121,13 @@ add.grid(row=6,column=2,columnspan=4,sticky="w")
 generator=Button(text="Generate Password",command=generate_password)
 generator.grid(row=5,column=3,sticky="e")
 
-search=Button(text="Search",width=15,command=search)
-search.grid(row=3,column=3,sticky="e")
+search_btn=Button(text="Search",width=15,command=search_password)
+search_btn.grid(row=3,column=3,sticky="e")
 
 WEntry=Entry(width=30)
 WEntry.grid(column=2,row=3,columnspan=3,sticky="w")
+WEntry.focus()
+
 
 EEntry=Entry(width=45)
 EEntry.grid(column=2,row=4,columnspan=4,sticky="w")
